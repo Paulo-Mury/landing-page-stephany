@@ -173,42 +173,18 @@ document.addEventListener('submit', (e) => {
     if (e.target.id === 'form-orcamento') {
         e.preventDefault();
 
-        const idDona = "A5B5C2D1E9F9G6H6I8J2K7L2M1"; 
-        const idSecretaria = "A5B5C2D1E9F7G2H3I0J6K5L4M2";
+        const idDona = "A5B5C2D1E9F9G6H6I8J2K7L2M1";
+        const n = idDona.replace(/\D/g, '');
 
-        let ultimoDestino = localStorage.getItem('ultimoContato');
-        
-        let idEscolhido;
-        let proximoDestino;
-
-        if (!ultimoDestino) {
-    
-            const sorteio = Math.random() < 0.5;
-            proximoDestino = sorteio ? 'dona' : 'secretaria';
-            idEscolhido = sorteio ? idDona : idSecretaria;
-            console.log("Primeiro acesso: Sorteado para " + proximoDestino);
-        } else {
-            if (ultimoDestino === 'dona') {
-                idEscolhido = idSecretaria;
-                proximoDestino = 'secretaria';
-            } else {
-                idEscolhido = idDona;
-                proximoDestino = 'dona';
-            }
-            console.log("Rodízio sequencial: Vez de " + proximoDestino);
-        }
-
-        localStorage.setItem('ultimoContato', proximoDestino);
-
-        const n = idEscolhido.replace(/\D/g, '');
-        
         const nome = document.getElementById('nome').value;
         const evento = document.getElementById('evento').value;
         const data = document.getElementById('data').value;
         const local = document.getElementById('local').value;
         const mensagem = document.getElementById('mensagem').value;
 
-        const texto = `*Novo Orçamento*%0A%0A*Nome:* ${nome}%0A*Evento:* ${evento}%0A*Data:* ${data}%0A*Local:* ${local}%0A*Mensagem:* ${mensagem}`;
+        const texto = encodeURIComponent(
+            `*Novo Orçamento*\n\n*Nome:* ${nome}\n*Evento:* ${evento}\n*Data:* ${data}\n*Local:* ${local}\n*Mensagem:* ${mensagem}`
+        );
 
         window.open(`https://api.whatsapp.com/send?phone=${n}&text=${texto}`, '_blank');
 
